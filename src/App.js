@@ -14,40 +14,12 @@ import TrackControls from "./components/trackControl"; // Importing newly combin
 
 
 let globalEditor = null;
-
-//export function SetupButtons() {
-
-//  document.getElementById('play').addEventListener('click', () => globalEditor.evaluate());
-//  document.getElementById('stop').addEventListener('click', () => globalEditor.stop());
-//  document.getElementById('process').addEventListener('click', () => {
-//    Proc()
-//  }
-//  )
-//  document.getElementById('process_play').addEventListener('click', () => {
-//    if (globalEditor != null) {
-//      Proc()
-//      globalEditor.evaluate()
-//    }
-//  }
-//  )
-//}
-
-
-
-export function ProcAndPlay() {
-  if (globalEditor != null && globalEditor.repl.state.started === true) {
-    console.log(globalEditor)
-    Proc()
-    globalEditor.evaluate();
-  }
-}
-
 export function Proc() {
 
     let proc_text = document.getElementById('proc').value
 
     // Replace both placeholders independently
-    let proc_text_replaced = proc_text
+    let proc_text_replaced = proc_text  
         .replaceAll('<p1_Radio>', ProcessText('p1'))
         .replaceAll('<p2_Radio>', ProcessText('p2'));
 
@@ -143,12 +115,14 @@ export default function StrudelDemo() {
             </div>
                       <div className="col-md-4">
                           <Controls
-                              onProcess={() => Proc()}
-                              onProcPlay={() => ProcAndPlay()}
-                              replay={() => Replay()}
                               onPlay={() => globalEditor && globalEditor.evaluate()}
                               onStop={() => globalEditor && globalEditor.stop()}
+                              replay={() => {
+                                  globalEditor.stop();
+                                  setTimeout(() => globalEditor.evaluate(), 300);
+                              }}
                           />
+
             </div>
           </div>
           <div className="row">
