@@ -40,31 +40,6 @@ export function ProcessText(radio) {
   return replace
 }
 
-// Replays the tune: stop current playback, then restart from the beginning
-export async function Replay() {
-    if (!globalEditor) return;
-
-    try { initAudioOnFirstClick(); } catch (e) { }
-
-    // Stop any current playback cleanly
-    if (globalEditor.repl?.state?.started && globalEditor.stop) {
-        console.log("Stopping current playback...");
-        await globalEditor.stop();
-    }
-
-    // Wait briefly to ensure the stop finishes
-    await new Promise((resolve) => setTimeout(resolve, 250));
-
-    // Reprocess the code (in case user changed tune text)
-    Proc();
-
-    // Restart playback
-    console.log("Restarting playback...");
-    globalEditor.evaluate();
-}
-
-
-
 export default function StrudelDemo() {
 
   const hasRun = useRef(false);
