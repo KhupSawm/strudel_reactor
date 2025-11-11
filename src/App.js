@@ -8,7 +8,7 @@ import { stranger_tune } from './tunes';
 import Controls from "./components/controls"; // Importing the nessesary buttons
 import P1Toggle from "./components/p1toggle"; // Importing p1toggle comp
 import P2Toggle from "./components/p2toggle"; // Importing p2toggle comp
-//import VolumeControl from "./components/volumeControl"; //Importing Volume Controll
+import VolumeControl from "./components/volumeControl"; //Importing Volume Controll
 
 
 let globalEditor = null;
@@ -123,6 +123,15 @@ export default function StrudelDemo() {
         globalEditor.evaluate();
     }
 
+    function handleVolumeChange(newVolume) {
+        if (webaudioOutput?.master?.gain) {
+            webaudioOutput.master.gain.value = newVolume;
+            console.log("Volume set to:", newVolume); // <- this should appear when slider is changed
+        } else {
+            console.warn("Gain node not ready.");
+        }
+    }
+
 
   return (
     <div>
@@ -153,6 +162,9 @@ export default function StrudelDemo() {
                       <div className="col-md-4">
                           <P1Toggle muted={muteP1} onToggle={setMuteP1} />
                           <P2Toggle muted={muteP2} onToggle={setMuteP2} />
+
+                          <VolumeControl onVolumeChange={handleVolumeChange} />
+
             </div>
           </div>
         </div>
