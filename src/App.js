@@ -9,29 +9,9 @@ import Controls from "./components/controls"; // Importing the nessesary buttons
 import P1Toggle from "./components/p1toggle"; // Importing p1toggle comp
 import P2Toggle from "./components/p2toggle"; // Importing p2toggle comp
 //import VolumeControl from "./components/volumeControl"; //Importing Volume Controll
-import TrackControls from "./components/trackControl"; // Importing newly combine volume and toggle trackcontrol
-
 
 
 let globalEditor = null;
-//export function Proc() {
-
-//    let proc_text = document.getElementById('proc').value
-
-//    // Replace both placeholders independently
-//    let proc_text_replaced = proc_text  
-//        .replaceAll('<p1_Radio>', ProcessText('p1'))
-//        .replaceAll('<p2_Radio>', ProcessText('p2'));
-
-//    globalEditor.setCode(proc_text_replaced)
-//}
-
-//export function ProcessText(radio) {
-
-//  let replace = ""
-//    if (radio === "p1" && document.getElementById('flexRadioDefault2')?.checked) {
-//        replace = "_"; // mute P1
-//    }
 
 export function ProcAndPlay() {
   if (globalEditor != null && globalEditor.repl.state.started === true) {
@@ -40,32 +20,6 @@ export function ProcAndPlay() {
     globalEditor.evaluate();
   }
 }
-// Testing
-//export function Proc() {
-
-//    let proc_text = document.getElementById('proc').value
-
-//    // Replace both placeholders independently
-//    let proc_text_replaced = proc_text
-//        .replaceAll('<p1_Radio>', ProcessText('p1'))
-//        .replaceAll('<p2_Radio>', ProcessText('p2'));
-
-//    globalEditor.setCode(proc_text_replaced)
-//}
-
-//export function ProcessText(radio) {
-
-//  let replace = ""
-//    if (radio === "p1" && document.getElementById('flexRadioDefault2')?.checked) {
-//        replace = "_"; // mute P1
-//    }
-
-//    if (radio === "p2" && document.getElementById('flexRadioP2Default2')?.checked) {
-//        replace = "_"; // mute P2
-//    }
-
-//  return replace
-//}
 
 // Replays the tune: stop current playback, then restart from the beginning
 export async function Replay() {
@@ -127,10 +81,7 @@ export default function StrudelDemo() {
         });
           setSongText(stranger_tune); // preload text
           setReady(true);             // enable buttons
-
-      //  Proc()
       })();
-      //document.getElementById('proc').value = stranger_tune
     }
 
   }, []);
@@ -144,6 +95,17 @@ export default function StrudelDemo() {
         }
     }, [songText]);
 
+    useEffect(() => {
+        if (!globalEditor) return;
+
+        let processed = songText
+            .replaceAll('<p1_Radio>', muteP1 ? '_' : '')
+            .replaceAll('<p2_Radio>', muteP2 ? '_' : '');
+
+        globalEditor.setCode(processed);
+        globalEditor.evaluate();
+
+    }, [muteP1, muteP2]);
 
   return (
     <div>
