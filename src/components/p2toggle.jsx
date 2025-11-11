@@ -1,5 +1,5 @@
-import { FaPlayCircle, FaVolumeMute } from "react-icons/fa";
-export default function P2Toggle({ onChange }) {
+import { FaVolumeMute } from "react-icons/fa";
+export default function P2Toggle({ muted, onToggle }) {
     return (
         <div className="form-check">
             <input

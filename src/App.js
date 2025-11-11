@@ -6,8 +6,8 @@ import { StrudelMirror } from '@strudel/codemirror';
 import { registerSoundfonts } from '@strudel/soundfonts';
 import { stranger_tune } from './tunes';
 import Controls from "./components/controls"; // Importing the nessesary buttons
-//import P1Toggle from "./components/p1toggle"; // Importing p1toggle comp
-//import P2Toggle from "./components/p2toggle"; // Importing p2toggle comp
+import P1Toggle from "./components/p1toggle"; // Importing p1toggle comp
+import P2Toggle from "./components/p2toggle"; // Importing p2toggle comp
 //import VolumeControl from "./components/volumeControl"; //Importing Volume Controll
 import TrackControls from "./components/trackControl"; // Importing newly combine volume and toggle trackcontrol
 
@@ -41,31 +41,31 @@ export function ProcAndPlay() {
   }
 }
 // Testing
-export function Proc() {
+//export function Proc() {
 
-    let proc_text = document.getElementById('proc').value
+//    let proc_text = document.getElementById('proc').value
 
-    // Replace both placeholders independently
-    let proc_text_replaced = proc_text
-        .replaceAll('<p1_Radio>', ProcessText('p1'))
-        .replaceAll('<p2_Radio>', ProcessText('p2'));
+//    // Replace both placeholders independently
+//    let proc_text_replaced = proc_text
+//        .replaceAll('<p1_Radio>', ProcessText('p1'))
+//        .replaceAll('<p2_Radio>', ProcessText('p2'));
 
-    globalEditor.setCode(proc_text_replaced)
-}
+//    globalEditor.setCode(proc_text_replaced)
+//}
 
-export function ProcessText(radio) {
+//export function ProcessText(radio) {
 
-  let replace = ""
-    if (radio === "p1" && document.getElementById('flexRadioDefault2')?.checked) {
-        replace = "_"; // mute P1
-    }
+//  let replace = ""
+//    if (radio === "p1" && document.getElementById('flexRadioDefault2')?.checked) {
+//        replace = "_"; // mute P1
+//    }
 
-    if (radio === "p2" && document.getElementById('flexRadioP2Default2')?.checked) {
-        replace = "_"; // mute P2
-    }
+//    if (radio === "p2" && document.getElementById('flexRadioP2Default2')?.checked) {
+//        replace = "_"; // mute P2
+//    }
 
-  return replace
-}
+//  return replace
+//}
 
 // Replays the tune: stop current playback, then restart from the beginning
 export async function Replay() {
@@ -98,6 +98,8 @@ export default function StrudelDemo() {
 
     const [ready, setReady] = useState(false);
 
+    const [muteP1, setMuteP1] = useState(false);
+    const [muteP2, setMuteP2] = useState(false);
 
   useEffect(() => {
 
@@ -163,8 +165,8 @@ export default function StrudelDemo() {
 
                                   // Clean up invalid placeholders
                                   let processed = songText
-                                      .replaceAll('<p1_Radio>', '')
-                                      .replaceAll('<p2_Radio>', '');
+                                      .replaceAll('<p1_Radio>', muteP1 ? '_' : '')
+                                      .replaceAll('<p2_Radio>', muteP2 ? '_' : '');
 
                                   console.log("Evaluating clean code:", processed);
 
@@ -186,26 +188,9 @@ export default function StrudelDemo() {
             <div className="col-md-8" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
               <div id="editor" />
             </div>
-            <div className="col-md-4">
-                          {/*<P1Toggle onChange={() => ProcAndPlay()} />*/}
-                          {/*<P2Toggle onChange={() => ProcAndPlay()} />*/}
-
-                          {/*<TrackControls*/}
-                          {/*    onTrackChange={() => ProcAndPlay()}*/}
-                          {/*    onVolumeChange={(value) => {*/}
-                          {/*        const procArea = document.getElementById("proc");*/}
-                          {/*        let text = procArea.value;*/}
-
-                          {/*        // Update gain for both p1 and p2 dynamically*/}
-                          {/*        text = text*/}
-                          {/*            .replace(/(p1:[\s\S]*?\.gain\()[^)]+(\))/, `$1${value}$2`)*/}
-                          {/*            .replace(/(p2:[\s\S]*?\.gain\()[^)]+(\))/, `$1${value}$2`);*/}
-
-                          {/*        procArea.value = text;*/}
-                          {/*        ProcAndPlay(); // re-run tune with updated gain*/}
-                          {/*    }}*/}
-                          {/*/>*/}
-
+                      <div className="col-md-4">
+                          <P1Toggle muted={muteP1} onToggle={setMuteP1} />
+                          <P2Toggle muted={muteP2} onToggle={setMuteP2} />
             </div>
           </div>
         </div>
