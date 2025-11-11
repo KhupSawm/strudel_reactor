@@ -33,12 +33,62 @@ let globalEditor = null;
 //        replace = "_"; // mute P1
 //    }
 
-//    if (radio === "p2" && document.getElementById('flexRadioP2Default2')?.checked) {
-//        replace = "_"; // mute P2
-//    }
+export function ProcAndPlay() {
+  if (globalEditor != null && globalEditor.repl.state.started === true) {
+    console.log(globalEditor)
+    Proc()
+    globalEditor.evaluate();
+  }
+}
+// Testing
+export function Proc() {
 
-//  return replace
-//}
+    let proc_text = document.getElementById('proc').value
+
+    // Replace both placeholders independently
+    let proc_text_replaced = proc_text
+        .replaceAll('<p1_Radio>', ProcessText('p1'))
+        .replaceAll('<p2_Radio>', ProcessText('p2'));
+
+    globalEditor.setCode(proc_text_replaced)
+}
+
+export function ProcessText(radio) {
+
+  let replace = ""
+    if (radio === "p1" && document.getElementById('flexRadioDefault2')?.checked) {
+        replace = "_"; // mute P1
+    }
+
+    if (radio === "p2" && document.getElementById('flexRadioP2Default2')?.checked) {
+        replace = "_"; // mute P2
+    }
+
+  return replace
+}
+
+// Replays the tune: stop current playback, then restart from the beginning
+export async function Replay() {
+    if (!globalEditor) return;
+
+    try { initAudioOnFirstClick(); } catch (e) { }
+
+    // Stop any current playback cleanly
+    if (globalEditor.repl?.state?.started && globalEditor.stop) {
+        console.log("Stopping current playback...");
+        await globalEditor.stop();
+    }
+
+    // Wait briefly to ensure the stop finishes
+    await new Promise((resolve) => setTimeout(resolve, 250));
+
+    // Reprocess the code (in case user changed tune text)
+    Proc();
+
+    // Restart playback
+    console.log("Restarting playback...");
+    globalEditor.evaluate();
+}
 
 export default function StrudelDemo() {
 
