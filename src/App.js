@@ -96,6 +96,9 @@ export default function StrudelDemo() {
 
     const [songText, setSongText] = useState("");
 
+    const [ready, setReady] = useState(false);
+
+
   useEffect(() => {
 
     if (!hasRun.current) {
@@ -120,9 +123,11 @@ export default function StrudelDemo() {
             await Promise.all([loadModules, registerSynthSounds(), registerSoundfonts()]);
           },
         });
+          setSongText(stranger_tune); // preload text
+          setReady(true);             // enable buttons
+
       //  Proc()
       })();
-        setSongText(stranger_tune);
       //document.getElementById('proc').value = stranger_tune
     }
 
@@ -132,6 +137,8 @@ export default function StrudelDemo() {
     useEffect(() => {
         if (globalEditor) {
             globalEditor.setCode(songText);
+            console.log("songText is:", songText);
+
         }
     }, [songText]);
 
@@ -148,9 +155,25 @@ export default function StrudelDemo() {
                           <textarea className="form-control" rows="15" id="proc" value={songText} onChange={(e) => setSongText(e.target.value)} ></textarea>
             </div>
                       <div className="col-md-4">
-                          <Controls
-                              onPlay={() => globalEditor && globalEditor.evaluate()}
-                              onStop={() => globalEditor && globalEditor.stop()}
+                          <Controls isReady={ready}
+                              onPlay={() => {
+                                  try { initAudioOnFirstClick(); } catch (e) { }
+
+                                  if (!globalEditor) return;
+
+                                  // Clean up invalid placeholders
+                                  let processed = songText
+                                      .replaceAll('<p1_Radio>', '')
+                                      .replaceAll('<p2_Radio>', '');
+
+                                  console.log("Evaluating clean code:", processed);
+
+                                  globalEditor.setCode(processed);
+                                  globalEditor.evaluate();
+                              }}
+    
+
+                              onStop={() => globalEditor?.stop()}
                               replay={() => {
                                   globalEditor.stop();
                                   setTimeout(() => globalEditor.evaluate(), 300);
@@ -167,21 +190,21 @@ export default function StrudelDemo() {
                           {/*<P1Toggle onChange={() => ProcAndPlay()} />*/}
                           {/*<P2Toggle onChange={() => ProcAndPlay()} />*/}
 
-                          <TrackControls
-                              onTrackChange={() => ProcAndPlay()}
-                              onVolumeChange={(value) => {
-                                  const procArea = document.getElementById("proc");
-                                  let text = procArea.value;
+                          {/*<TrackControls*/}
+                          {/*    onTrackChange={() => ProcAndPlay()}*/}
+                          {/*    onVolumeChange={(value) => {*/}
+                          {/*        const procArea = document.getElementById("proc");*/}
+                          {/*        let text = procArea.value;*/}
 
-                                  // Update gain for both p1 and p2 dynamically
-                                  text = text
-                                      .replace(/(p1:[\s\S]*?\.gain\()[^)]+(\))/, `$1${value}$2`)
-                                      .replace(/(p2:[\s\S]*?\.gain\()[^)]+(\))/, `$1${value}$2`);
+                          {/*        // Update gain for both p1 and p2 dynamically*/}
+                          {/*        text = text*/}
+                          {/*            .replace(/(p1:[\s\S]*?\.gain\()[^)]+(\))/, `$1${value}$2`)*/}
+                          {/*            .replace(/(p2:[\s\S]*?\.gain\()[^)]+(\))/, `$1${value}$2`);*/}
 
-                                  procArea.value = text;
-                                  ProcAndPlay(); // re-run tune with updated gain
-                              }}
-                          />
+                          {/*        procArea.value = text;*/}
+                          {/*        ProcAndPlay(); // re-run tune with updated gain*/}
+                          {/*    }}*/}
+                          {/*/>*/}
 
             </div>
           </div>
