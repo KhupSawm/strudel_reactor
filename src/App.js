@@ -107,6 +107,23 @@ export default function StrudelDemo() {
 
     }, [muteP1, muteP2]);
 
+    function handlePlay(songText, muteP1, muteP2) {
+        try { initAudioOnFirstClick(); } catch (e) { }
+
+        if (!globalEditor) return;
+
+        // Replace mute placeholders based on toggle state
+        let processed = songText
+            .replaceAll('<p1_Radio>', muteP1 ? '_' : '')
+            .replaceAll('<p2_Radio>', muteP2 ? '_' : '');
+
+        console.log("Evaluating clean code:", processed);
+
+        globalEditor.setCode(processed);
+        globalEditor.evaluate();
+    }
+
+
   return (
     <div>
       <h2>Strudel Demo</h2>
@@ -120,30 +137,13 @@ export default function StrudelDemo() {
             </div>
                       <div className="col-md-4">
                           <Controls isReady={ready}
-                              onPlay={() => {
-                                  try { initAudioOnFirstClick(); } catch (e) { }
-
-                                  if (!globalEditor) return;
-
-                                  // Clean up invalid placeholders
-                                  let processed = songText
-                                      .replaceAll('<p1_Radio>', muteP1 ? '_' : '')
-                                      .replaceAll('<p2_Radio>', muteP2 ? '_' : '');
-
-                                  console.log("Evaluating clean code:", processed);
-
-                                  globalEditor.setCode(processed);
-                                  globalEditor.evaluate();
-                              }}
-    
-
+                              onPlay={() => { handlePlay(songText, muteP1, muteP2) }}
                               onStop={() => globalEditor?.stop()}
                               replay={() => {
                                   globalEditor.stop();
                                   setTimeout(() => globalEditor.evaluate(), 300);
                               }}
                           />
-
             </div>
           </div>
           <div className="row">
