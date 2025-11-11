@@ -1,7 +1,7 @@
 ﻿import './cors-redirect';
 import './App.css';
 import { initStrudel, note, hush, evalScope, getAudioContext, webaudioOutput, registerSynthSounds, initAudioOnFirstClick, transpiler } from "@strudel/web";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { StrudelMirror } from '@strudel/codemirror';
 import { registerSoundfonts } from '@strudel/soundfonts';
 import { stranger_tune } from './tunes';
@@ -14,35 +14,37 @@ import TrackControls from "./components/trackControl"; // Importing newly combin
 
 
 let globalEditor = null;
-export function Proc() {
+//export function Proc() {
 
-    let proc_text = document.getElementById('proc').value
+//    let proc_text = document.getElementById('proc').value
 
-    // Replace both placeholders independently
-    let proc_text_replaced = proc_text  
-        .replaceAll('<p1_Radio>', ProcessText('p1'))
-        .replaceAll('<p2_Radio>', ProcessText('p2'));
+//    // Replace both placeholders independently
+//    let proc_text_replaced = proc_text  
+//        .replaceAll('<p1_Radio>', ProcessText('p1'))
+//        .replaceAll('<p2_Radio>', ProcessText('p2'));
 
-    globalEditor.setCode(proc_text_replaced)
-}
+//    globalEditor.setCode(proc_text_replaced)
+//}
 
-export function ProcessText(radio) {
+//export function ProcessText(radio) {
 
-  let replace = ""
-    if (radio === "p1" && document.getElementById('flexRadioDefault2')?.checked) {
-        replace = "_"; // mute P1
-    }
+//  let replace = ""
+//    if (radio === "p1" && document.getElementById('flexRadioDefault2')?.checked) {
+//        replace = "_"; // mute P1
+//    }
 
-    if (radio === "p2" && document.getElementById('flexRadioP2Default2')?.checked) {
-        replace = "_"; // mute P2
-    }
+//    if (radio === "p2" && document.getElementById('flexRadioP2Default2')?.checked) {
+//        replace = "_"; // mute P2
+//    }
 
-  return replace
-}
+//  return replace
+//}
 
 export default function StrudelDemo() {
 
-  const hasRun = useRef(false);
+    const hasRun = useRef(false);
+
+    const [songText, setSongText] = useState("");
 
   useEffect(() => {
 
@@ -68,13 +70,20 @@ export default function StrudelDemo() {
             await Promise.all([loadModules, registerSynthSounds(), registerSoundfonts()]);
           },
         });
-        Proc()
+      //  Proc()
       })();
-
-      document.getElementById('proc').value = stranger_tune
+        setSongText(stranger_tune);
+      //document.getElementById('proc').value = stranger_tune
     }
 
   }, []);
+
+    // Runs setcode everytime songtext changes
+    useEffect(() => {
+        if (globalEditor) {
+            globalEditor.setCode(songText);
+        }
+    }, [songText]);
 
 
   return (
@@ -85,8 +94,8 @@ export default function StrudelDemo() {
         <div className="container-fluid">
           <div className="row">
             <div className="col-md-8" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
-              <label htmlFor="exampleFormControlTextarea1" className="form-label">Text to preprocess:</label>
-              <textarea className="form-control" rows="15" id="proc" ></textarea>
+                          <label htmlFor="exampleFormControlTextarea1" className="form-label">Text to preprocess:</label>
+                          <textarea className="form-control" rows="15" id="proc" value={songText} onChange={(e) => setSongText(e.target.value)} ></textarea>
             </div>
                       <div className="col-md-4">
                           <Controls
