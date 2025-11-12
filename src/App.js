@@ -9,6 +9,7 @@ import Controls from "./components/controls"; // Importing the nessesary buttons
 import P1Toggle from "./components/p1toggle"; // Importing p1toggle comp
 import P2Toggle from "./components/p2toggle"; // Importing p2toggle comp
 import VolumeControl from "./components/volumeControl"; //Importing Volume Controll
+import { preprocess } from "./util/preprocess";
 
 
 let globalEditor = null;
@@ -79,7 +80,7 @@ export default function StrudelDemo() {
 
     }, [muteP1, muteP2]);
 
-    function handlePlay(songText, muteP1, muteP2) {
+    function handlePlay(songText, muteP1, muteP2, volume) {
         try { initAudioOnFirstClick(); } catch (e) { }
 
         if (!globalEditor) return;
@@ -89,9 +90,10 @@ export default function StrudelDemo() {
             .replaceAll('<p1_Radio>', muteP1 ? '_' : '')
             .replaceAll('<p2_Radio>', muteP2 ? '_' : '');
 
-        console.log("Evaluating clean code:", processed);
+        let vol_process = preprocess(processed, volume);
+        console.log("Evaluating processed code:\n", vol_process); // Debug purpose
 
-        globalEditor.setCode(processed);
+        globalEditor.setCode(vol_process);
         globalEditor.evaluate();
     }
 
@@ -108,11 +110,11 @@ export default function StrudelDemo() {
             </div>
                       <div className="col-md-4">
                           <Controls isReady={ready}
-                              onPlay={() => { handlePlay(songText, muteP1, muteP2) }}
+                              onPlay={() => { handlePlay(songText, muteP1, muteP2, volume) }}
                               onStop={() => globalEditor?.stop()}
                               replay={() => {
                                   globalEditor.stop();
-                                  setTimeout(() => globalEditor.evaluate(), 300);
+                                  setTimeout(() => handlePlay(songText, muteP1, muteP2, volume), 300);
                               }}
                           />
             </div>
