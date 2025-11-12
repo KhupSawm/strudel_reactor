@@ -23,7 +23,8 @@ export default function StrudelDemo() {
 
     const [muteP1, setMuteP1] = useState(false);
     const [muteP2, setMuteP2] = useState(false);
-    const [gainReady, setGainReady] = useState(false);
+
+    const [volume, setVolume] = useState(1);
 
 
   useEffect(() => {
@@ -52,15 +53,6 @@ export default function StrudelDemo() {
         });
           setSongText(stranger_tune); // preload text
           setReady(true);             // enable buttons
-          const gainNode = globalEditor?.output?.context?.gain;
-
-          if (gainNode) {
-              setGainReady(true);
-              console.log("✅ Gain node is ready");
-          } else {
-              console.warn("⚠️ Gain node not available");
-          }
-
       })();
     }
 
@@ -103,19 +95,6 @@ export default function StrudelDemo() {
         globalEditor.evaluate();
     }
 
-    function handleVolumeChange(newVolume) {
-        const gainNode = globalEditor?.output?.context?.gain;
-
-        if (gainNode) {
-            gainNode.gain.value = newVolume;
-            console.log("🎚 Volume set to:", newVolume);
-        } else {
-            console.warn("⚠️ Gain node not available. Volume not set.");
-        }
-    }
-
-
-
   return (
     <div>
       <h2>Strudel Demo</h2>
@@ -146,9 +125,7 @@ export default function StrudelDemo() {
                           <P1Toggle muted={muteP1} onToggle={setMuteP1} />
                           <P2Toggle muted={muteP2} onToggle={setMuteP2} />
 
-                          {gainReady && (
-                              <VolumeControl onVolumeChange={handleVolumeChange} />
-                          )}
+                          <VolumeControl onVolumeChange={setVolume} volume={volume} />
 
             </div>
           </div>
