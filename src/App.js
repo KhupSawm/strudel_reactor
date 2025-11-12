@@ -124,6 +124,15 @@ export default function StrudelDemo() {
         } else {
             console.warn("Gain node not ready.");
         }
+        // Only recompile if playing
+        if (isPlaying) {
+            let processed = songText
+                .replaceAll('<p1_Radio>', muteP1 ? '_' : '')
+                .replaceAll('<p2_Radio>', muteP2 ? '_' : '');
+            const volProcessed = preprocess(processed, newVolume);
+            globalEditor.setCode(volProcessed);
+            globalEditor.evaluate();
+        }
     }
 
 
@@ -141,7 +150,7 @@ export default function StrudelDemo() {
                       <div className="col-md-4">
                           <Controls isReady={ready}
                               onPlay={() => { handlePlay(songText, muteP1, muteP2, volume) }}
-                              onStop={() => globalEditor?.stop(), setIsPlaying(false)}
+                              onStop={() => { globalEditor?.stop(); setIsPlaying(false);} }
                               replay={() => {
                                   globalEditor.stop();
                                   setTimeout(() => handlePlay(songText, muteP1, muteP2, volume), 300);
