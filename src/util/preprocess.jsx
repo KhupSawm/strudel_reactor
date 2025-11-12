@@ -2,8 +2,8 @@
 export function preprocess(inputText, volume) {
     let outputText = inputText;
 
-    // Replace all {{VOLUME}} with given volume
-    outputText = outputText.replaceAll("{{VOLUME}}", volume);
+    // Replace all vol with given volume
+    outputText = outputText.replaceAll("vol", volume);
 
     // Match text blocks like "key:\n ... until next key or end"
     const regex = /[a-zA-Z0-9_]+:\s*\n[\s\S]+?(?=[a-zA-Z0-9_]+:|$)/gm;

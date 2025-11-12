@@ -7,8 +7,8 @@ export const stranger_tune = `setcps(0.7);
   .superimpose((x) => x.detune("<0.5>"))
   .lpenv(perlin.slow(3).range(1, 4))
   .lpf(perlin.slow(2).range(100, 2000))
-  .gain(0.3);
-<p2_Radio>p2: "<a1 e2>/8".clip(0.8).struct("x*8").s("supersaw").note();
+  .gain(vol);
+<p2_Radio>p2: "<a1 e2>/8".clip(0.8).struct("x*8").s("supersaw").note().gain(vol);
 // Grabbed from Hacker News: https://news.ycombinator.com/item?id=44939874
 // @version 1.2`;
     
