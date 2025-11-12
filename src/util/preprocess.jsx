@@ -1,10 +1,4 @@
-﻿// Replaces placeholders and adjusts gain() based on volume value
-export function preprocess(inputText, volume) {
-    let outputText = inputText;
-
-    // Replace all vol with given volume
-    outputText = outputText.replaceAll("vol", volume);
-
+﻿export function preprocess(inputText, volume) {
     //// Match text blocks like "key:\n ... until next key or end"
     //const regex = /[a-zA-Z0-9_]+:\s*\n[\s\S]+?(?=[a-zA-Z0-9_]+:|$)/gm;
     //let m;
@@ -30,6 +24,7 @@ export function preprocess(inputText, volume) {
 
     // Return modified text or original if no change
     //return matches3.length > 0 ? matches3[matches3.length - 1] : outputText;
-    return outputText;
+    return inputText.replaceAll("vol", volume);
+;
 
 }
