@@ -28,6 +28,7 @@ export default function StrudelDemo() {
 
     const [volume, setVolume] = useState(1);
 
+    const [isPlaying, setIsPlaying] = useState(false);
 
 
   useEffect(() => {
@@ -112,6 +113,7 @@ export default function StrudelDemo() {
 
         globalEditor.setCode(vol_process);
         globalEditor.evaluate();
+        setIsPlaying(true);
     }
 
     function handleVolumeChange(newVolume) {
