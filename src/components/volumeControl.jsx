@@ -13,7 +13,7 @@ export default function VolumeControl({ volume, onVolumeChange }) {
     return (
         <div className="mb-3">
             <label htmlFor="volumeSlider" className="form-label">
-                Volume: {volume}
+                Volume: {Math.round(volume * 100)}%
             </label>
             <input
                 id="volumeSlider"
