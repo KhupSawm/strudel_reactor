@@ -141,7 +141,7 @@ export default function StrudelDemo() {
                       <div className="col-md-4">
                           <Controls isReady={ready}
                               onPlay={() => { handlePlay(songText, muteP1, muteP2, volume) }}
-                              onStop={() => globalEditor?.stop()}
+                              onStop={() => globalEditor?.stop(), setIsPlaying(false)}
                               replay={() => {
                                   globalEditor.stop();
                                   setTimeout(() => handlePlay(songText, muteP1, muteP2, volume), 300);
