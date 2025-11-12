@@ -11,4 +11,12 @@ export const stranger_tune = `setcps(0.7);
 <p2_Radio>p2: "<a1 e2>/8".clip(0.8).struct("x*8").s("supersaw").note().gain(vol);
 // Grabbed from Hacker News: https://news.ycombinator.com/item?id=44939874
 // @version 1.2`;
+
+export const phonk_loop = `
+// Drift Phonk inspired loop
+s("bd ~ sn ~ bd ~ sn").gain(vol)
+  | s("~ hh ~ hh ~ hh ~ hh").gain(vol)
+  | s("~ ~ oh ~ ~ ~ oh ~").gain(vol)
+  .tempo(90)
+`;
     
