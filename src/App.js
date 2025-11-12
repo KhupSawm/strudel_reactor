@@ -23,6 +23,8 @@ export default function StrudelDemo() {
 
     const [muteP1, setMuteP1] = useState(false);
     const [muteP2, setMuteP2] = useState(false);
+    const [gainReady, setGainReady] = useState(false);
+
 
   useEffect(() => {
 
@@ -50,6 +52,15 @@ export default function StrudelDemo() {
         });
           setSongText(stranger_tune); // preload text
           setReady(true);             // enable buttons
+          const gainNode = globalEditor?.output?.context?.gain;
+
+          if (gainNode) {
+              setGainReady(true);
+              console.log("✅ Gain node is ready");
+          } else {
+              console.warn("⚠️ Gain node not available");
+          }
+
       })();
     }
 
@@ -93,13 +104,16 @@ export default function StrudelDemo() {
     }
 
     function handleVolumeChange(newVolume) {
-        if (webaudioOutput?.master?.gain) {
-            webaudioOutput.master.gain.value = newVolume;
-            console.log("Volume set to:", newVolume); // <- this should appear when slider is changed
+        const gainNode = globalEditor?.output?.context?.gain;
+
+        if (gainNode) {
+            gainNode.gain.value = newVolume;
+            console.log("🎚 Volume set to:", newVolume);
         } else {
-            console.warn("Gain node not ready.");
+            console.warn("⚠️ Gain node not available. Volume not set.");
         }
     }
+
 
 
   return (
@@ -132,7 +146,9 @@ export default function StrudelDemo() {
                           <P1Toggle muted={muteP1} onToggle={setMuteP1} />
                           <P2Toggle muted={muteP2} onToggle={setMuteP2} />
 
-                          <VolumeControl onVolumeChange={handleVolumeChange} />
+                          {gainReady && (
+                              <VolumeControl onVolumeChange={handleVolumeChange} />
+                          )}
 
             </div>
           </div>
