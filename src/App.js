@@ -13,7 +13,8 @@ import { preprocess } from "./util/preprocess";
 
 
 let globalEditor = null;
-
+// Global gain node reference
+let masterGainNode = null;
 export default function StrudelDemo() {
 
     const hasRun = useRef(false);
@@ -26,6 +27,7 @@ export default function StrudelDemo() {
     const [muteP2, setMuteP2] = useState(false);
 
     const [volume, setVolume] = useState(1);
+
 
 
   useEffect(() => {
@@ -54,6 +56,21 @@ export default function StrudelDemo() {
         });
           setSongText(stranger_tune); // preload text
           setReady(true);             // enable buttons
+
+          // Setup gain node
+          const audioCtx = getAudioContext();
+          masterGainNode = audioCtx.createGain();
+          masterGainNode.gain.value = volume; // Initial volume
+
+          // Replace default output with gain routing
+          const customOutput = {
+              outputNode: masterGainNode,
+              gain: masterGainNode,
+          };
+          globalEditor.setOutput(customOutput);
+
+          // Connect to destination
+          masterGainNode.connect(audioCtx.destination);
       })();
     }
 
@@ -97,6 +114,17 @@ export default function StrudelDemo() {
         globalEditor.evaluate();
     }
 
+    function handleVolumeChange(newVolume) {
+        setVolume(newVolume); // Update state
+        if (masterGainNode) {
+            masterGainNode.gain.value = newVolume;
+            console.log("Live volume set to:", newVolume);
+        } else {
+            console.warn("Gain node not ready.");
+        }
+    }
+
+
   return (
     <div>
       <h2>Strudel Demo</h2>
@@ -127,7 +155,7 @@ export default function StrudelDemo() {
                           <P1Toggle muted={muteP1} onToggle={setMuteP1} />
                           <P2Toggle muted={muteP2} onToggle={setMuteP2} />
 
-                          <VolumeControl onVolumeChange={setVolume} volume={volume} />
+                          <VolumeControl onVolumeChange={handleVolumeChange} volume={volume} />
 
             </div>
           </div>
