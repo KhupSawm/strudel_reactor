@@ -20,3 +20,7 @@ s("bd ~ sn ~ bd ~ sn").gain(vol)
   .tempo(90)
 `;
     
+export const Tunes = {
+    "Stanger Tune": stranger_tune,
+    "Phonk Loop": phonk_loop,
+};

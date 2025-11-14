@@ -4,13 +4,13 @@ import { initStrudel, note, hush, evalScope, getAudioContext, webaudioOutput, re
 import { useEffect, useRef, useState } from "react";
 import { StrudelMirror } from '@strudel/codemirror';
 import { registerSoundfonts } from '@strudel/soundfonts';
-import { stranger_tune } from './tunes';
+import { Tunes, stranger_tune } from './tunes';
 import Controls from "./components/controls"; // Importing the nessesary buttons
 import P1Toggle from "./components/p1toggle"; // Importing p1toggle comp
 import P2Toggle from "./components/p2toggle"; // Importing p2toggle comp
 import VolumeControl from "./components/volumeControl"; //Importing Volume Controll
 import { preprocess } from "./util/preprocess";
-
+import TuneDropdown from "./components/tuneDropdown";
 
 let globalEditor = null;
 // Global gain node reference
@@ -55,7 +55,7 @@ export default function StrudelDemo() {
             await Promise.all([loadModules, registerSynthSounds(), registerSoundfonts()]);
           },
         });
-          setSongText(stranger_tune); // preload text
+          //setSongText(Tunes); // preload text
           setReady(true);             // enable buttons
 
           // Setup gain node
@@ -145,6 +145,13 @@ export default function StrudelDemo() {
           <div className="row">
             <div className="col-md-8" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
                           <label htmlFor="exampleFormControlTextarea1" className="form-label">Text to preprocess:</label>
+                          <TuneDropdown
+                              tunes={Tunes}
+                              onSelect={(tuneName) => {
+                                  const selectedTune = Tunes[tuneName];
+                                  if (selectedTune) setSongText(selectedTune);
+                              }}
+                          />
                           <textarea className="form-control" rows="15" id="proc" value={songText} onChange={(e) => setSongText(e.target.value)} ></textarea>
             </div>
                       <div className="col-md-4">
@@ -165,7 +172,7 @@ export default function StrudelDemo() {
                       <div className="col-md-4">
                           <P1Toggle muted={muteP1} onToggle={setMuteP1} />
                           <P2Toggle muted={muteP2} onToggle={setMuteP2} />
-
+                            
                           <VolumeControl onVolumeChange={handleVolumeChange} volume={volume} />
 
             </div>

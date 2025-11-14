@@ -1,5 +1,5 @@
 ﻿// Dropdown to select a tune
-export default function tuneDropdown({ tunes, onSelect }) {
+export default function TuneDropdown({ tunes, onSelect }) {
     return (
         <div className="mb-3">
             <label htmlFor="tuneDropdown" className="form-label">
