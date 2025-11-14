@@ -31,51 +31,51 @@ export default function StrudelDemo() {
     const [isPlaying, setIsPlaying] = useState(false);
 
 
-  useEffect(() => {
+    useEffect(() => {
 
-    if (!hasRun.current) {
-      hasRun.current = true;
-      (async () => {
-        await initStrudel();
+        if (!hasRun.current) {
+            hasRun.current = true;
+            (async () => {
+                await initStrudel();
 
-        globalEditor = new StrudelMirror({
-          defaultOutput: webaudioOutput,
-          getTime: () => getAudioContext().currentTime,
-          transpiler,
-          root: document.getElementById('editor'),
-          prebake: async () => {
-            initAudioOnFirstClick(); // needed to make the browser happy (don't await this here..)
-            const loadModules = evalScope(
-              import('@strudel/core'),
-              import('@strudel/draw'),
-              import('@strudel/mini'),
-              import('@strudel/tonal'),
-              import('@strudel/webaudio'),
-            );
-            await Promise.all([loadModules, registerSynthSounds(), registerSoundfonts()]);
-          },
-        });
-          //setSongText(Tunes); // preload text
-          setReady(true);             // enable buttons
+                globalEditor = new StrudelMirror({
+                    defaultOutput: webaudioOutput,
+                    getTime: () => getAudioContext().currentTime,
+                    transpiler,
+                    root: document.getElementById('editor'),
+                    prebake: async () => {
+                        initAudioOnFirstClick(); // needed to make the browser happy (don't await this here..)
+                        const loadModules = evalScope(
+                            import('@strudel/core'),
+                            import('@strudel/draw'),
+                            import('@strudel/mini'),
+                            import('@strudel/tonal'),
+                            import('@strudel/webaudio'),
+                        );
+                        await Promise.all([loadModules, registerSynthSounds(), registerSoundfonts()]);
+                    },
+                });
+                //setSongText(Tunes); // preload text
+                setReady(true);             // enable buttons
 
-          // Setup gain node
-          const audioCtx = getAudioContext();
-          masterGainNode = audioCtx.createGain();
-          masterGainNode.gain.value = volume; // Initial volume
+                // Setup gain node
+                const audioCtx = getAudioContext();
+                masterGainNode = audioCtx.createGain();
+                masterGainNode.gain.value = volume; // Initial volume
 
-          // Replace default output with gain routing
-          const customOutput = {
-              outputNode: masterGainNode,
-              gain: masterGainNode,
-          };
-          globalEditor.setOutput(customOutput);
+                // Replace default output with gain routing
+                const customOutput = {
+                    outputNode: masterGainNode,
+                    gain: masterGainNode,
+                };
+                globalEditor.setOutput(customOutput);
 
-          // Connect to destination
-          masterGainNode.connect(audioCtx.destination);
-      })();
-    }
+                // Connect to destination
+                masterGainNode.connect(audioCtx.destination);
+            })();
+        }
 
-  }, []);
+    }, []);
 
     // Runs setcode everytime songtext changes
     useEffect(() => {
@@ -87,13 +87,14 @@ export default function StrudelDemo() {
     }, [songText]);
 
     useEffect(() => {
-        if (!globalEditor) return;
+        if (!globalEditor || !isPlaying) return;
 
         let processed = songText
             .replaceAll('<p1_Radio>', muteP1 ? '_' : '')
             .replaceAll('<p2_Radio>', muteP2 ? '_' : '');
 
-        globalEditor.setCode(processed);
+        const volProcessed = preprocess(processed, volume);
+        globalEditor.setCode(volProcessed);
         globalEditor.evaluate();
 
     }, [muteP1, muteP2]);
