@@ -10,7 +10,7 @@ export default function P1Toggle({ muted, onToggle }) {
                 onChange={() => onToggle(!muted)}
             />
             <label className="form-check-label" htmlFor="p1Toggle">
-                (P1) <FaVolumeMute/>
+                Mute P1 <FaVolumeMute/>
             </label>
         </div>
     );

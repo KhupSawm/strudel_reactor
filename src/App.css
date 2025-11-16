@@ -147,7 +147,7 @@ textarea#proc {
     }
 
 .redo-btn {
-    background: #676161;
+    background: #bbb9b9;
     color: #525151;
 }
 
@@ -156,6 +156,7 @@ textarea#proc {
         border-color: #2ecc71;
     }
 .save-btn {
+    background: #8aee9f;
     color: #2e1dc1;
 }
 
@@ -165,6 +166,7 @@ textarea#proc {
         border-color: #2ecc71;
     }
 .load-btn {
+
     color: #525151;
 }
 
