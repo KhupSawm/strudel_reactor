@@ -139,11 +139,30 @@ export default function StrudelDemo() {
 
     // Function save as json
     function handleSaveJson() {
+
+        // Create a new Blob object containing the songText as JSON
         const file = new Blob([JSON.stringify({ songText })], { type = "application/json" });
+
+        // Create Link route
         const link = document.createElement("Link");
         link.href = URL.createObjectURL(file);
-        link.download = "song.json";
+        link.download = "song.json"; // Set file name as song
         link.click();
+    }
+    // Function to load a JSON file and update songText
+    function handleLoadJson(e) {
+        const file = e.target.files[0]; // Get the selected file
+        if (!file) return;
+
+        const reader = new FileReader(); // Create a file reader
+        reader.onload = () => {
+
+            // Parse JSON content and set it to songText
+            const data = JSON.parse(reader.result);
+            setSongText(data.songText || "");
+        };
+
+        reader.readAsText(file); // Read the file as text
     }
 
 
