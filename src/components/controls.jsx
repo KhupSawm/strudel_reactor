@@ -1,4 +1,4 @@
-﻿import { FaPlay, FaStop, FaRedo, FaCogs, FaPlayCircle } from "react-icons/fa";
+﻿import { FaPlay, FaStop, FaRedo, FaSave, FaUpload } from "react-icons/fa";
 
 export default function Controls({ onSaveJson, onLoadJson, onPlay, onStop, replay, isReady}) {
     return (
@@ -10,8 +10,8 @@ export default function Controls({ onSaveJson, onLoadJson, onPlay, onStop, repla
             <button disabled={!isReady} className="control-btn redo-btn" title="Reload" onClick={replay}><FaRedo /></button>
 
             {/* Save current song state as JSON */}
-            <button className="btn btn-outline-primary m-1" onClick={onSaveJson}>
-                Save JSON
+            <button className="btn btn-outline-primary m-1" onClick={onSaveJson} title="Save as Json">
+                <FaSave/>
             </button>
 
             {/* Load song state from JSON file */}
@@ -22,8 +22,8 @@ export default function Controls({ onSaveJson, onLoadJson, onPlay, onStop, repla
                 style={{ display: "none" }}
                 onChange={onLoadJson}
             />
-            <label htmlFor="jsonFileInput" className="btn btn-outline-secondary m-1">
-                Load JSON
+            <label htmlFor="jsonFileInput" className="btn btn-outline-secondary m-1" title="Load">
+                <FaUpload/>
             </label>
 
         </div>
