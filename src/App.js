@@ -2,6 +2,7 @@
 import './App.css';
 import { initStrudel, note, hush, evalScope, getAudioContext, webaudioOutput, registerSynthSounds, initAudioOnFirstClick, transpiler } from "@strudel/web";
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { StrudelMirror } from '@strudel/codemirror';
 import { registerSoundfonts } from '@strudel/soundfonts';
 import { Tunes } from './tunes';
@@ -136,53 +137,62 @@ export default function StrudelDemo() {
         }
     }
 
+    // Function save as json
+    function handleSaveJson() {
+        const file = new Blob([JSON.stringify({ songText })], { type = "application/json" });
+        const link = document.createElement("Link");
+        link.href = URL.createObjectURL(file);
+        link.download = "song.json";
+        link.click();
+    }
 
-  return (
-    <div>
-      <h2>Strudel Demo</h2>
-      <main>
 
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-md-8" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
-                          <label htmlFor="exampleFormControlTextarea1" className="form-label">Text to preprocess:</label>
-                          <TuneDropdown
-                              tunes={Tunes}
-                              onSelect={(tuneName) => {
-                                  const selectedTune = Tunes[tuneName];
-                                  if (selectedTune) setSongText(selectedTune);
-                              }}
-                          />
-                          <textarea className="form-control" rows="15" id="proc" value={songText} onChange={(e) => setSongText(e.target.value)} ></textarea>
-            </div>
-                      <div className="col-md-4">
-                          <Controls isReady={ready}
-                              onPlay={() => { handlePlay(songText, muteP1, muteP2, volume) }}
-                              onStop={() => { globalEditor?.stop(); setIsPlaying(false);} }
-                              replay={() => {
-                                  globalEditor.stop();
-                                  setTimeout(() => handlePlay(songText, muteP1, muteP2, volume), 300);
-                              }}
-                          />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-8" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
-              <div id="editor" />
-            </div>
-                      <div className="col-md-4">
-                          <P1Toggle muted={muteP1} onToggle={setMuteP1} />
-                          <P2Toggle muted={muteP2} onToggle={setMuteP2} />
+      return (
+        <div>
+          <h2>Strudel Demo</h2>
+          <main>
+
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-md-8" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
+                              <label htmlFor="exampleFormControlTextarea1" className="form-label">Text to preprocess:</label>
+                              <TuneDropdown
+                                  tunes={Tunes}
+                                  onSelect={(tuneName) => {
+                                      const selectedTune = Tunes[tuneName];
+                                      if (selectedTune) setSongText(selectedTune);
+                                  }}
+                              />
+                              <textarea className="form-control" rows="15" id="proc" value={songText} onChange={(e) => setSongText(e.target.value)} ></textarea>
+                </div>
+                          <div className="col-md-4">
+                              <Controls isReady={ready}
+                                  onPlay={() => { handlePlay(songText, muteP1, muteP2, volume) }}
+                                  onStop={() => { globalEditor?.stop(); setIsPlaying(false);} }
+                                  replay={() => {
+                                      globalEditor.stop();
+                                      setTimeout(() => handlePlay(songText, muteP1, muteP2, volume), 300);
+                                  }}
+                              />
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-md-8" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
+                  <div id="editor" />
+                </div>
+                          <div className="col-md-4">
+                              <P1Toggle muted={muteP1} onToggle={setMuteP1} />
+                              <P2Toggle muted={muteP2} onToggle={setMuteP2} />
                             
-                          <VolumeControl onVolumeChange={handleVolumeChange} volume={volume} />
+                              <VolumeControl onVolumeChange={handleVolumeChange} volume={volume} />
 
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </main >
-    </div >
-  );
+          </main >
+        </div >
+      );
 
 
-}
+    }
 
