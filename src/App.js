@@ -2,7 +2,6 @@
 import './App.css';
 import { initStrudel, note, hush, evalScope, getAudioContext, webaudioOutput, registerSynthSounds, initAudioOnFirstClick, transpiler } from "@strudel/web";
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import { StrudelMirror } from '@strudel/codemirror';
 import { registerSoundfonts } from '@strudel/soundfonts';
 import { Tunes } from './tunes';
@@ -141,10 +140,10 @@ export default function StrudelDemo() {
     function handleSaveJson() {
 
         // Create a new Blob object containing the songText as JSON
-        const file = new Blob([JSON.stringify({ songText })], { type = "application/json" });
+        const file = new Blob([JSON.stringify({ songText })], { type: "application/json" });
 
         // Create Link route
-        const link = document.createElement("Link");
+        const link = document.createElement("a");
         link.href = URL.createObjectURL(file);
         link.download = "song.json"; // Set file name as song
         link.click();
@@ -187,11 +186,13 @@ export default function StrudelDemo() {
                           <div className="col-md-4">
                               <Controls isReady={ready}
                                   onPlay={() => { handlePlay(songText, muteP1, muteP2, volume) }}
-                                  onStop={() => { globalEditor?.stop(); setIsPlaying(false);} }
+                                  onStop={() => { globalEditor?.stop(); setIsPlaying(false); }}
                                   replay={() => {
                                       globalEditor.stop();
                                       setTimeout(() => handlePlay(songText, muteP1, muteP2, volume), 300);
                                   }}
+                                  onSaveJson={handleSaveJson}
+                                  onLoadJson={handleLoadJson}
                               />
                 </div>
               </div>

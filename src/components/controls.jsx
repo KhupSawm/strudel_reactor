@@ -10,7 +10,7 @@ export default function Controls({ onSaveJson, onLoadJson, onPlay, onStop, repla
             <button disabled={!isReady} className="control-btn redo-btn" title="Reload" onClick={replay}><FaRedo /></button>
 
             {/* Save current song state as JSON */}
-            <button className="btn btn-outline-primary m-1" onClick={onSaveJson} title="Save as Json">
+            <button className="control-btn save-btn m-1" onClick={onSaveJson} title="Save as Json">
                 <FaSave/>
             </button>
 
@@ -22,7 +22,7 @@ export default function Controls({ onSaveJson, onLoadJson, onPlay, onStop, repla
                 style={{ display: "none" }}
                 onChange={onLoadJson}
             />
-            <label htmlFor="jsonFileInput" className="btn btn-outline-secondary m-1" title="Load">
+            <label htmlFor="jsonFileInput" className="control-btn load-btn m-1" title="Load">
                 <FaUpload/>
             </label>
 
