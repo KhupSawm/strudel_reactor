@@ -11,6 +11,7 @@ import P2Toggle from "./components/p2toggle"; // Importing p2toggle comp
 import VolumeControl from "./components/volumeControl"; //Importing Volume Controll
 import { preprocess } from "./util/preprocess";
 import TuneDropdown from "./components/tuneDropdown";
+import Graph from "./components/strudleGraph";
 
 let globalEditor = null;
 // Global gain node reference
@@ -30,6 +31,7 @@ export default function StrudelDemo() {
 
     const [isPlaying, setIsPlaying] = useState(false);
 
+    const [logData, setLogData] = useState([]);
 
     useEffect(() => {
 
@@ -72,9 +74,15 @@ export default function StrudelDemo() {
 
                 // Connect to destination
                 masterGainNode.connect(audioCtx.destination);
+
+                // Listen for Strudel's .log() values and forward to D3
+                window.addEventListener("log", handleD3Graph);
             })();
         }
-
+        // Cleanup when component unmounts
+        return () => {
+            window.removeEventListener("log", handleD3Graph);
+        };
     }, []);
 
     // Runs setcode everytime songtext changes
@@ -164,6 +172,22 @@ export default function StrudelDemo() {
         reader.readAsText(file); // Read the file as text
     }
 
+    // D3 graph function handler
+    // Event handler for capturing values from Strudel's `.log()` output
+    const handleD3Graph = (event) => {
+        const newValue = event.detail; // Get the new value emitted from the log event
+
+        // Update the logData state with the new value
+        setLogData((prev) => {
+            const updated = [...prev, newValue]; // Append the new value to the existing array
+
+            // Limit the array to the last 100 values for performance and visualization clarity
+            return updated.length > 100 ? updated.slice(-100) : updated;
+        });
+    };
+
+
+
 
       return (
         <div>
@@ -194,21 +218,27 @@ export default function StrudelDemo() {
                         onSaveJson={handleSaveJson}
                         onLoadJson={handleLoadJson}
                               />
-                        <P1Toggle muted={muteP1} onToggle={setMuteP1} />
-                        <P2Toggle muted={muteP2} onToggle={setMuteP2} />
-                        <br/>
-                        <VolumeControl onVolumeChange={handleVolumeChange} volume={volume} />
                 </div>
-
-
                 </div>
 
               <div className="row">
                 <div className="col-md-8" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
-                  <div id="editor" />
+                     <div id="editor" />
                 </div>
+                <div className="col-md-4">
+                    <P1Toggle muted={muteP1} onToggle={setMuteP1} />
+                    <P2Toggle muted={muteP2} onToggle={setMuteP2} />
 
-              </div>
+                    <VolumeControl onVolumeChange={handleVolumeChange} volume={volume} />
+                 </div>
+
+
+              </div>                          <div className="row">
+                              <div className="col-12 md-12">
+                                  <h5>Audio Log Graph</h5>
+                                  <Graph data={logData} />
+                              </div>
+                          </div>
             </div>
           </main >
         </div >
