@@ -8,7 +8,7 @@ export default function Graph({ data }) {
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove(); // Clear old content
 
-        const width = 600;
+        const width = 1170;
         const height = 200;
 
         svg.attr("width", width).attr("height", height);
