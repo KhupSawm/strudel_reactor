@@ -197,7 +197,7 @@ export default function StrudelDemo() {
             <div className="container-fluid">
               <div className="row">
                 <div className="col-md-8" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
-                    <label htmlFor="exampleFormControlTextarea1" className="form-label">Text to preprocess:</label>
+                    <label htmlFor="exampleFormControlTextarea1" className="text-white form-label">Text to preprocess:</label>
                         <TuneDropdown
                             tunes={Tunes}
                             onSelect={(tuneName) => {
@@ -205,9 +205,9 @@ export default function StrudelDemo() {
                                 if (selectedTune) setSongText(selectedTune);
                             }}
                         />
-                    <textarea className="form-control" rows="15" id="proc" value={songText} onChange={(e) => setSongText(e.target.value)} ></textarea>
+                              <textarea className="form-control  bg-transparent text-white" rows="15" id="proc" value={songText} onChange={(e) => setSongText(e.target.value)} ></textarea>
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-4 bg-transparent">
                     <Controls isReady={ready}
                         onPlay={() => { handlePlay(songText, muteP1, muteP2, volume) }}
                         onStop={() => { globalEditor?.stop(); setIsPlaying(false); }}
@@ -222,10 +222,10 @@ export default function StrudelDemo() {
                 </div>
 
               <div className="row">
-                <div className="col-md-8" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
-                     <div id="editor" />
+                          <div className="col-md-8" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
+                              <div id="editor" className="bg-transparent" />
                 </div>
-                <div className="col-md-4">
+                          <div className="col-md-4 text-white  bg-transparent">
                     <P1Toggle muted={muteP1} onToggle={setMuteP1} />
                     <P2Toggle muted={muteP2} onToggle={setMuteP2} />
 
@@ -234,7 +234,7 @@ export default function StrudelDemo() {
 
 
               </div>                          <div className="row">
-                              <div className="col-12 md-12">
+                              <div className="col-12 md-12 text-white">
                                   <h5>Audio Log Graph</h5>
                                   <Graph data={logData} />
                               </div>

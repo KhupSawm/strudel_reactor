@@ -68,3 +68,67 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+# Strudel Music Sequencer WebApp
+
+This project is a React-based interface for writing, evaluating, and visualizing live-coded music using the [@strudel/web](https://github.com/tidalcycles/strudel) environment.
+
+## Controls Overview
+
+### TuneDropdown
+- A dropdown menu that lets users select a predefined tune from `tunes.js`.
+- Automatically populates the code editor with the selected tune.
+
+### Editor
+- The `StrudelMirror` code editor allows you to write or modify music code in Strudel format.
+- It supports live evaluation of code and audio rendering via Web Audio API.
+
+### Buttons
+- **Play**: Preprocesses and evaluates the current Strudel code.
+- **Stop**: Stops audio playback.
+- **Replay**: Restarts the code evaluation after a short delay.
+- **Save JSON**: Exports the current song text to a `.json` file.
+- **Load JSON**: Loads a previously saved `.json` song file.
+
+### Volume Control
+- A slider that sets the global audio gain using a gain node.
+- Dynamically applies volume changes in real-time.
+
+### P1Toggle & P2Toggle
+- Mute toggles for two pattern placeholders (`<p1_Radio>` and `<p2_Radio>`) in your code.
+- When toggled off, these replace the pattern with `_` (silence).
+
+### D3 Graph
+- Still working progress unable to make it work.
+
+##Demo Video
+
+[Watch Demo on YouTube](https://youtu.be/TVfr6lgSHlc)  
+
+## ?? AI Tools Used
+
+### Tool:
+- **ChatGPT (OpenAI GPT-4 / GPT-4o)**
+
+### Prompts Given:
+- Play button doesn’t work — help fix evaluate timing in Strudel.”
+- Help build a React dropdown that loads tunes into my editor.”
+- How do I connect a GainNode to Strudel playback for volume control?”
+- Strudel .log() gives cutoff numbers — how can I graph them?”
+
+### Outputs Received:
+- Working Play/Stop/Replay logic
+- Update?on?change volume system
+- Dropdown integration for tune presets
+- Assistance parsing .log() values and connecting them to D3 graph state
+
+## ? Features Summary
+
+- Tune editor with live preview
+- Save/load your code as JSON
+- Per-track mute controls
+- Dynamic volume adjustment
+- React hooks and modular components
+
+---
+

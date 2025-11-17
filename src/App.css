@@ -38,8 +38,10 @@
 }
 /* ---------- Global Layout ---------- */
 body {
-    background: linear-gradient(135deg, #89f7fe, #66a6ff);
-    color: #f4f4f4;
+    background-image: url("../public/bg.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
@@ -59,7 +61,6 @@ h2 {
 .container-fluid {
     max-width: 1200px;
     margin: auto;
-    background: rgba(255, 255, 255, 0.25);
     border-radius: 16px;
     padding: 2rem;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
@@ -67,8 +68,6 @@ h2 {
 
 /* ---------- Textarea ---------- */
 textarea#proc {
-    background-color: #f4f8ff;
-    color: #222;
     border: none;
     border-radius: 8px;
     padding: 1rem;
@@ -106,9 +105,7 @@ textarea#proc {
 }
 
 .control-btn {
-    background: rgba(255, 255, 255, 0.1);
     border: 2px solid #6c63ff;
-    color: #6c63ff;
     border-radius: 50%;
     width: 55px;
     height: 55px;
