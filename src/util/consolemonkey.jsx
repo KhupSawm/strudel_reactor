@@ -1,41 +1,40 @@
 ﻿let originalLog = null;
 const logArray = [];
 
+
 export default function console_monkey_patch() {
-    // Avoid running more than once
+
+    //If react multicalls this, do nothing
     if (originalLog) return;
 
     originalLog = console.log;
 
+    //Overwrite console.log function
     console.log = function (...args) {
-        // Join all args as a string
-        const joined = args.join(" ");
+        //Join args with space, default behaviour. Check for [hap], that's a strudel prefix
+        if (args.join(" ").substring(0, 8) === "%c[hap] ") {
 
-        // Check if it's a Strudel note log like "%c[hap]"
-        if (joined.substring(0, 8) === "%c[hap] ") {
-            // Clean it and store in array
-            const cleaned = joined.replace("%c[hap] ", "");
-            logArray.push(cleaned);
+            //If so, add it to the Array of values.
+            //Then remove the oldest values once we've hit 100.
+            logArray.push(args.join(" ").replace("%c[hap] ", ""));
 
-            // Limit to last 100 values
-            if (logArray.length > 100) logArray.splice(0, 10);
-
-            // Dispatch data event for the app to listen to
+            if (logArray.length > 100) {
+                logArray.splice(0, 1);
+            }
+            //Dispatch a customevent we can listen to in App.js
             const event = new CustomEvent("d3Data", { detail: [...logArray] });
             document.dispatchEvent(event);
-        }
 
-        // Call original log function too
+        }
         originalLog.apply(console, args);
     };
+
 }
 
-// Export helper to get current graph data
 export function getD3Data() {
     return [...logArray];
 }
 
-// Export subscribe/unsubscribe helpers
 export function subscribe(eventName, listener) {
     document.addEventListener(eventName, listener);
 }
